@@ -6,7 +6,7 @@ Available options:
 - SQL Server database -> SQL Server database
 
 ## Requirements
-SQL Server Management Objects (SMO) 2017 have to be installed on the client machine(also can edit .config file to redirect to a different SMO version if needed).
+.Net Framework v4.6.2 and SQL Server Management Objects (SMO) 2017 have to be installed on the client machine(also can edit .config file to redirect to a different SMO version if needed).
 
 ## Usage
 ```
