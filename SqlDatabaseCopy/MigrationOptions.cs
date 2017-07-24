@@ -16,6 +16,7 @@ namespace SqlDatabaseCopy
             options.MaxErrors = Convert.ToInt32(ConfigurationManager.AppSettings["MaxErrors"]);
             options.MaxAttempts = Convert.ToInt32(ConfigurationManager.AppSettings["MaxAttempts"]);
             options.MaxAttempts = Convert.ToInt32(ConfigurationManager.AppSettings["MaxAttempts"]);
+            options.LogSql = Convert.ToBoolean(ConfigurationManager.AppSettings["LogSql"]);
 
             return options;
         }
