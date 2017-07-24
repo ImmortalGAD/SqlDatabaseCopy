@@ -12,3 +12,4 @@ SQL Server Management Objects (SMO) 2017 have to be installed on the client mach
 ```
 SqlDatabaseCopy.exe "<source-connection-string>" "<target-connection-string>" [-DataOnly | -SchemaOnly] [-NoLog]
 ```
+**Note**: empty database has to be created in the target before utility run.
