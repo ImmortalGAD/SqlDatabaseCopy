@@ -106,18 +106,12 @@ namespace SqlDatabaseCopy
         {
             Console.WriteLine("Collect Dependencies...");
 
-            // no schema dependencies
-            if (options.DataOnly)
-            {
-                dependenciesChild = new Dictionary<int, MigrationItem[]>();
-                dependenciesParent = new Dictionary<int, int[]>();
-                return;
-            }
-
             using (var source = SqlDatabase.Connect(options.SourceConnectionString, options.ScripterOptions))
             {
-                var dependencies = source.GetSqlDependencies();
                 var itemsMap = items.ToDictionary(i => i.Object.Id);
+
+                var dependencies = source.GetSqlDependencies()
+                    .Where(d => itemsMap.ContainsKey(d.Id) && itemsMap.ContainsKey(d.DependsOn));
 
                 // collect direct dependencies (id -> referenced id) 
                 dependenciesParent = dependencies
