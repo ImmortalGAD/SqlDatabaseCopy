@@ -114,9 +114,11 @@ namespace SqlDatabaseCopy
 
         public SqlObject[] GetSqlObjects(bool tablesOnly)
         {
-            var sql = @"select object_id, SCHEMA_NAME(schema_id), name, type from sys.objects where is_ms_shipped = 0" + (tablesOnly
-                ? " and type = 'U'"
-                : " and type in ('U', 'V', 'FN', 'TF', 'P')");
+            var sql = @"select o.object_id, SCHEMA_NAME(o.schema_id), o.name, o.type from sys.objects o
+                        left outer join sys.extended_properties e on e.major_id = o.object_id and e.minor_id = 0 and e.class = 1 and e.name = 'microsoft_database_tools_support'
+                        where o.is_ms_shipped = 0 and e.major_id is null" + (tablesOnly
+                ? " and o.type = 'U'"
+                : " and o.type in ('U', 'V', 'FN', 'TF', 'P')");
 
             return SqlHelper.ExecuteList(Connection, sql, r => new SqlObject
             {

@@ -70,15 +70,16 @@ namespace SqlDatabaseCopy
                         throw new InvalidOperationException("Target Database already has Schema migrated");
                 }
 
-                items = options.DataOnly
-                    // fill with only tables have to be populated
-                    ? target.GetSqlObjects(tablesOnly: true).CreateMigrationItems()
-                    // or extract all objects from the source otherwise
-                    : source.GetSqlObjects(tablesOnly: false).CreateMigrationItems();
+                items = source.GetSqlObjects(tablesOnly: options.DataOnly).CreateMigrationItems();
 
-                // in case when data is only copied - ensure tables are empty
+                // in case when data is only copied - ensure tables are migrated and empty
                 if (options.DataOnly)
                 {
+                    if (items.Select(item => item.Object.FullName)
+                        .Except(target.GetSqlObjects(tablesOnly: true).Select(o => o.FullName), StringComparer.InvariantCultureIgnoreCase).Any())
+                    {
+                        throw new InvalidOperationException("You need to migrate Schema first");
+                    }
                     ValidateTargetDatabaseEmpty();
                 }
 
